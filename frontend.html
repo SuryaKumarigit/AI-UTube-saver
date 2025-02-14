@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download YouTube Video</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input {
+            margin-right: 10px;
+            padding: 5px;
+        }
+        button {
+            padding: 5px 10px;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Download YouTube Video</h1>
+    <form id="downloadForm">
+        <input type="text" name="video_url" placeholder="Enter YouTube URL" required>
+        <input type="text" name="save_path" placeholder="Enter save path (optional)" value="downloads">
+        <button type="submit">Download</button>
+    </form>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        document.getElementById('downloadForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission from reloading the page
+
+            const formData = new FormData(event.target);
+            fetch('http://localhost:8000/download', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').textContent = data.message;
+            })
+            .catch(error => {
+                document.getElementById('result').textContent = 'Error: ' + error;
+            });
+        });
+    </script>
+
+</body>
+</html>
